@@ -17,7 +17,7 @@ Filter = require('./filter')
 module.exports =
 class Vibrant
   @DefaultOpts:
-    colorCount: 64
+    colorCount: 16
     quality: 5
     generator: new DefaultGenerator()
     Image: null
@@ -54,19 +54,14 @@ class Vibrant
     quantizer = new @opts.Quantizer()
     quantizer.initialize(imageData.data, @opts)
 
-    swatches = quantizer.getQuantizedColors()
+    @all_swatches = quantizer.getQuantizedColors()
 
-    @generator.generate(swatches)
+    # @generator.generate(swatches)
     # Clean up
     image.removeCanvas()
 
   swatches: =>
-    Vibrant:      @generator.getVibrantSwatch()
-    Muted:        @generator.getMutedSwatch()
-    DarkVibrant:  @generator.getDarkVibrantSwatch()
-    DarkMuted:    @generator.getDarkMutedSwatch()
-    LightVibrant: @generator.getLightVibrantSwatch()
-    LightMuted:   @generator.getLightMutedSwatch()
+    @all_swatches
 
 module.exports.Builder =
 class Builder
