@@ -3,9 +3,13 @@
   <style media="screen">
     .color-block {
       position: relative;
-      width: 64px;
-      height: 64px;
+      width: 48px;
+      height: 48px;
       display: inline-block;
+    }
+
+    img {
+      max-width: 250px;
     }
 
   </style>
@@ -35,30 +39,37 @@
       palette.className = "palette";
       section.appendChild(palette);
 
-      function addColorBlock(hex) {
+      function addColorBlock(swatch) {
         var div = document.createElement('div');
-        div.className = "color-block";
-        div.style.background = hex;
+        div.className = "color-block " + swatch.getHex();
+        div.style.background = swatch.getHex();
+        div.innerHTML = swatch.getPopulation();
         palette.appendChild(div);
       }
 
-      Vibrant.from(src).getPalette(function(err, swatches) {
-        if (err) throw err;
-        console.log(swatches);
-        for (var key in swatches) {
-          var swatch = swatches[key];
-          if (swatch) {
-            var hex = swatch.getHex();
-            console.log(key + ": " + hex);
-            addColorBlock(hex);
-          }
+      Vibrant
+      .from(src)
+      .maxColorCount(16)
+      .quality(5)
+      .minPopulation(5)
+      .minRgbDiff(15)
+      .clearFilters()
+      .getPalette(function(err, swatches) {
+        for (i = 0; i < swatches.length; i++) {
+          addColorBlock(swatches[i]);
         }
       });
     }
-    test('/examples/1.jpg')
-    test('/examples/2.jpg')
-    test('/examples/3.jpg')
-    test('/examples/4.jpg')
-    test('https://avatars3.githubusercontent.com/u/922715?v=3&s=460')
+
+    test('/examples/5.png')
+    test('/examples/8.png')
+    test('/examples/6.png')
+    test('/examples/7.png')
+    test('/examples/10.png')
+    test('/examples/11.jpg')
+    test('/examples/12.png')
+    test('/examples/13.png')
+    test('/examples/14.png')
+    test('/examples/15.jpg')
   </script>
 </body>

@@ -23,6 +23,8 @@ class Vibrant
     Image: null
     Quantizer: require('./quantizer').MMCQ
     filters: []
+    minPopulation: 35
+    minRgbDiff: 15
 
   @from: (src) ->
     new Builder(src)
@@ -54,14 +56,37 @@ class Vibrant
     quantizer = new @opts.Quantizer()
     quantizer.initialize(imageData.data, @opts)
 
-    @all_swatches = quantizer.getQuantizedColors()
+    @allSwatches = quantizer.getQuantizedColors()
 
-    # @generator.generate(swatches)
-    # Clean up
     image.removeCanvas()
 
   swatches: =>
-    @all_swatches
+    finalSwatches = []
+
+    @allSwatches = @allSwatches.sort (a, b) ->
+      b.getPopulation() - a.getPopulation()
+
+    comparingPopulation = @getComparingPopulation(@allSwatches)
+
+    for swatch in @allSwatches
+      if @populationPercentage(swatch.getPopulation(), comparingPopulation) > @opts.minPopulation
+        should_be_added = true
+
+        for final_swatch in finalSwatches
+          if Vibrant.Util.rgbDiff(final_swatch.rgb, swatch.rgb) < @opts.minRgbDiff
+            should_be_added = false
+            break
+
+        if should_be_added
+          finalSwatches.push swatch
+
+    finalSwatches
+
+  populationPercentage: (population, comparingPopulation) ->
+    (population / comparingPopulation) * 100
+
+  getComparingPopulation: (swatches) ->
+    swatches[1].getPopulation()
 
 module.exports.Builder =
 class Builder
@@ -94,12 +119,16 @@ class Builder
     @opts.quality = q
     @
 
-  useImage: (image) ->
-    @opts.Image = image
+  minPopulation: (q) ->
+    @opts.minPopulation = q
     @
 
-  useGenerator: (generator) ->
-    @opts.generator = generator
+  minRgbDiff: (q) ->
+    @opts.minRgbDiff = q
+    @
+
+  useImage: (image) ->
+    @opts.Image = image
     @
 
   useQuantizer: (quantizer) ->
