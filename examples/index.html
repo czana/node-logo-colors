@@ -22,7 +22,6 @@
   <script type="text/javascript">
     function test(src) {
 
-      // var v = new Vibrant(src);
       var section = document.createElement('section');
       document.body.appendChild(section);
 
@@ -49,7 +48,7 @@
 
       Vibrant
       .from(src)
-      .maxColorCount(16)
+      .maxColorCount(24)
       .quality(5)
       .minPopulation(5)
       .minRgbDiff(15)
@@ -61,15 +60,13 @@
       });
     }
 
-    test('/examples/5.png')
-    test('/examples/8.png')
-    test('/examples/6.png')
-    test('/examples/7.png')
-    test('/examples/10.png')
-    test('/examples/11.jpg')
-    test('/examples/12.png')
-    test('/examples/13.png')
-    test('/examples/14.png')
-    test('/examples/15.jpg')
+    function displayLogos(count, extension) {
+      for (i = 1; i <= count; i++)
+        test('/examples/logos/' + extension + '/' + i + '.' + extension);
+    };
+
+    displayLogos(2, 'jpg');
+    displayLogos(18, 'png');
+
   </script>
 </body>
