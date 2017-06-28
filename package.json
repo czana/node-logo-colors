@@ -1,7 +1,7 @@
 {
-  "name": "node-vibrant",
+  "name": "node-logo-colors",
   "version": "2.1.2",
-  "description": "Node.js port of vibrant.js. Get color variations from an image. Basically a JS port of Android's Palette",
+  "description": "Fork of node-vibrant, simplified version to find prominent colors in logos",
   "main": "lib/index.js",
   "browser": "lib/browser.js",
   "directories": {
@@ -48,19 +48,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/akfish/node-vibrant.git"
+    "url": "https://github.com/czana/node-logo-colors.git"
   },
   "keywords": [
     "color",
     "detection",
     "varation",
-    "image",
-    "picture",
+    "logo",
     "canvas",
-    "vibrant",
-    "muted",
-    "colour"
+    "vibrant"
   ],
-  "author": "akfish",
+  "author": "tc",
   "license": "MIT"
 }
