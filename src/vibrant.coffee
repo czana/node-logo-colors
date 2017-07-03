@@ -25,6 +25,7 @@ class Vibrant
     filters: []
     minPopulation: 35
     minRgbDiff: 15
+    comparingPopulationIndex: 1
 
   @from: (src) ->
     new Builder(src)
@@ -66,7 +67,7 @@ class Vibrant
     @allSwatches = @allSwatches.sort (a, b) ->
       b.getPopulation() - a.getPopulation()
 
-    comparingPopulation = @getComparingPopulation(@allSwatches)
+    comparingPopulation = @getComparingPopulation(@allSwatches, @opts.comparingPopulationIndex)
 
     for swatch in @allSwatches
       if @populationPercentage(swatch.getPopulation(), comparingPopulation) > @opts.minPopulation
@@ -83,10 +84,18 @@ class Vibrant
     finalSwatches
 
   populationPercentage: (population, comparingPopulation) ->
+    if comparingPopulation == 0
+      console.log('comparing population equals 0!')
+      return 0
+
     (population / comparingPopulation) * 100
 
-  getComparingPopulation: (swatches) ->
-    swatches[1].getPopulation()
+  getComparingPopulation: (swatches, index) ->
+    if swatches.length > index
+      swatches[index].getPopulation()
+    else
+      console.log('there is no swatches with index - ' + index)
+      100
 
 module.exports.Builder =
 class Builder
@@ -125,6 +134,10 @@ class Builder
 
   minRgbDiff: (q) ->
     @opts.minRgbDiff = q
+    @
+
+  comparingPopulationIndex: (q) ->
+    @opts.comparingPopulationIndex = q
     @
 
   useImage: (image) ->
